@@ -45,7 +45,7 @@ const Insights: React.FC<InsightsProps> = ({ articles, onArticleSelect, onSeeAll
                 <span className="w-1 h-1 bg-slate-300 rounded-full" />
                 <span className="text-[9px] uppercase tracking-widest text-slate-400">{article.date}</span>
               </div>
-              <h3 className="text-2xl font-serif text-slate-900 leading-snug group-hover:italic transition-all duration-300">
+              <h3 className="text-2xl font-serif text-slate-900 leading-snug transition-all duration-300">
                 {article.title}
               </h3>
             </div>

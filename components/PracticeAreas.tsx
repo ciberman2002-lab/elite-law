@@ -25,7 +25,7 @@ const PracticeAreas: React.FC = () => {
               <span className="text-slate-200 text-5xl font-serif mb-8 group-hover:text-slate-900 transition-colors duration-500 z-10">
                 {(index + 1).toString().padStart(2, '0')}
               </span>
-              <h3 className="text-xl font-bold text-slate-900 mb-4 group-hover:italic transition-all duration-300 z-10">{area.title}</h3>
+              <h3 className="text-xl font-bold text-slate-900 mb-4 transition-all duration-300 z-10">{area.title}</h3>
               <p className="text-slate-500 text-sm leading-relaxed mb-8 flex-grow z-10 font-light">
                 {area.description}
               </p>

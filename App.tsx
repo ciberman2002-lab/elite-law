@@ -12,7 +12,6 @@ import { PRACTICE_AREAS } from './constants';
 const SANITY_PROJECT_ID = 'f1isnmso';
 const SANITY_DATASET = 'production';
 
-// Robust fallback data for when Sanity fetch fails (e.g., CORS issues)
 const FALLBACK_ARTICLES: ArticleType[] = [
   {
     id: 'fb-1',
@@ -58,11 +57,11 @@ const FALLBACK_ARTICLES: ArticleType[] = [
   }
 ];
 
-const SANITY_QUERY = encodeURIComponent(`*[_type == "post"] | order(_createdAt desc) {
+const SANITY_QUERY = encodeURIComponent(`*[_type == "post" && !(_id in path("drafts.**"))] | order(publishedAt desc, _createdAt desc) {
   "id": _id,
   title,
   "category": coalesce(categories[0]->title, "Informativo"),
-  "date": _createdAt,
+  "date": coalesce(publishedAt, _createdAt),
   "author": coalesce(author->name, "Elite Legal"),
   "image": mainImage.asset->url,
   "excerpt": excerpt,
@@ -79,7 +78,6 @@ const App: React.FC = () => {
     const fetchArticles = async () => {
       try {
         setIsLoading(true);
-        // Using apicdn for better performance and robustness
         const url = `https://${SANITY_PROJECT_ID}.apicdn.sanity.io/v2021-10-21/data/query/${SANITY_DATASET}?query=${SANITY_QUERY}`;
         
         const response = await fetch(url);
@@ -94,11 +92,10 @@ const App: React.FC = () => {
           }));
           setArticles(formattedArticles);
         } else {
-          // If query returns empty but successful
           setArticles(FALLBACK_ARTICLES);
         }
       } catch (error) {
-        console.warn("Utilizando artigos de backup devido a erro no Sanity (verifique as configurações de CORS em sanity.io/manage):", error);
+        console.warn("Utilizando artigos de backup:", error);
         setArticles(FALLBACK_ARTICLES);
       } finally {
         setIsLoading(false);
@@ -185,7 +182,7 @@ const App: React.FC = () => {
                       <span className="text-slate-200 font-serif text-4xl group-hover:text-slate-900 transition-colors">{(i+1).toString().padStart(2, '0')}</span>
                       <div className="h-[1px] w-12 bg-slate-100"></div>
                     </div>
-                    <h2 className="text-3xl font-serif mb-6 group-hover:italic transition-all duration-300">{area.title}</h2>
+                    <h2 className="text-3xl font-serif mb-6 transition-all duration-300">{area.title}</h2>
                     <p className="text-slate-600 font-light text-lg mb-8 leading-relaxed max-w-xl">{area.details}</p>
                     <button className="text-[10px] uppercase tracking-widest font-bold flex items-center group-hover:translate-x-4 transition-transform">
                       Download Brochure <svg className="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 4v16m8-8H4" strokeWidth="2" strokeLinecap="round"/></svg>
