@@ -9,8 +9,12 @@ import LegalAssistant from './components/LegalAssistant';
 import { View, Article as ArticleType } from './types';
 import { PRACTICE_AREAS } from './constants';
 
-const SANITY_PROJECT_ID = 'f1isnmso';
-const SANITY_DATASET = 'production';
+// Configurações do Sanity centralizadas
+const SANITY_CONFIG = {
+  projectId: 'f1isnmso',
+  dataset: 'production',
+  apiVersion: '2021-10-21'
+};
 
 const FALLBACK_ARTICLES: ArticleType[] = [
   {
@@ -78,7 +82,7 @@ const App: React.FC = () => {
     const fetchArticles = async () => {
       try {
         setIsLoading(true);
-        const url = `https://${SANITY_PROJECT_ID}.apicdn.sanity.io/v2021-10-21/data/query/${SANITY_DATASET}?query=${SANITY_QUERY}`;
+        const url = `https://${SANITY_CONFIG.projectId}.apicdn.sanity.io/v${SANITY_CONFIG.apiVersion}/data/query/${SANITY_CONFIG.dataset}?query=${SANITY_QUERY}`;
         
         const response = await fetch(url);
         if (!response.ok) throw new Error('Falha na resposta da rede');

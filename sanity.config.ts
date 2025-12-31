@@ -1,6 +1,7 @@
 
 import { defineConfig } from 'sanity';
-import { deskTool } from 'sanity/desk';
+import { structureTool } from 'sanity/structure';
+import { visionTool } from '@sanity/vision';
 import { schemaTypes } from './schema';
 
 export default defineConfig({
@@ -8,7 +9,11 @@ export default defineConfig({
   title: 'Elite Legal Admin',
   projectId: 'f1isnmso',
   dataset: 'production',
-  plugins: [deskTool()],
+  basePath: '/admin',
+  plugins: [
+    structureTool(),
+    visionTool()
+  ],
   schema: {
     types: schemaTypes,
   },
